@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#090b0d">
+<title>PROJECT 18 | ۱۸ قفل؛ یک راز</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#090b0d;color:#edf2ed;
+ font-family:Tahoma,Arial,sans-serif;line-height:1.9;
+}
+main{max-width:760px;margin:auto;padding:22px 15px 45px}
+header{text-align:center;padding:28px 5px}
+.logo{color:#a5e6a0;letter-spacing:4px;direction:ltr;font-size:12px}
+h1{font-size:34px;margin:8px 0}
+.muted{color:#9ba7a0;font-size:14px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat,.card{
+ background:#111619;border:1px solid #293438;
+ border-radius:15px;padding:15px;margin-bottom:14px;
+}
+.stat span{display:block;color:#9ba7a0;font-size:12px}
+.stat strong{font-size:24px;color:#a5e6a0}
+.track{height:5px;background:#252d30;border-radius:8px;margin:15px 0 22px}
+.bar{height:100%;width:0;background:#a5e6a0;transition:width .3s}
+.tag{font-size:11px;letter-spacing:2px;color:#a5e6a0;direction:ltr}
+.qhead{display:flex;justify-content:space-between;gap:8px;color:#9ba7a0;font-size:12px}
+h2{font-size:19px;line-height:1.9;margin:9px 0}
+.options{display:grid;grid-template-columns:1fr;gap:9px;margin-top:14px}
+.option{
+ width:100%;text-align:right;background:#171d20;color:#edf2ed;
+ border:1px solid #303b3e;border-radius:10px;padding:12px;
+ font:inherit;cursor:pointer;min-height:48px;
+}
+.option b{color:#a5e6a0;margin-left:8px}
+.option:disabled{opacity:.65}
+.option:focus-visible,button:focus-visible,input:focus-visible{
+ outline:2px solid #a5e6a0;outline-offset:3px
+}
+.feedback{min-height:28px;color:#ff9b9b;font-size:13px;margin-top:7px}
+.good{color:#a5e6a0}
+.reveal{display:none;color:#a5e6a0;border-top:1px solid #293438;margin-top:8px;padding-top:8px}
+.reveal.show{display:block}
+.codes{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}
+.pill{background:#142019;border:1px solid #344b39;color:#a5e6a0;border-radius:30px;padding:4px 10px;font-size:12px}
+.total{display:flex;justify-content:space-between;align-items:center;border-top:1px solid #293438;padding-top:10px}
+.total strong{font-size:26px;color:#a5e6a0}
+input{
+ min-width:0;flex:1;background:#090d0f;border:1px solid #3b464b;
+ color:white;border-radius:10px;padding:12px;font:inherit
+}
+button.submit{background:#24472d;color:#eaffea;border:1px solid #4c7151;border-radius:10px;padding:10px 14px;font:inherit;cursor:pointer}
+.form{display:flex;gap:8px;flex-wrap:wrap}
+.message{display:none;border:1px solid #55775a;background:#0d1710;padding:17px;border-radius:14px;margin-top:18px}
+.message.show{display:block}
+.message h2{color:#a5e6a0}
+.signature{color:#a5e6a0;font-weight:bold}
+.footer{text-align:center;color:#66736b;font-size:11px;direction:ltr;margin-top:25px}
+@media(min-width:560px){.options{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+
+<body>
+<main>
+<header>
+ <div class="logo">CONFIDENTIAL FILE / 018</div>
+ <h1>۱۸ قفل؛ یک راز</h1>
+ <div class="muted">PROJECT 18 — پرونده‌ای که باید کشفش کنی.</div>
+</header>
+
+<div class="stats">
+ <div class="stat"><span>قفل‌های بازشده</span><strong id="progress">۰ / ۱۸</strong></div>
+ <div class="stat"><span>مجموع کدها</span><strong id="sumTop">۰</strong></div>
+</div>
+<div class="track"><div class="bar" id="bar"></div></div>
+
+<section class="card">
+ هر جواب درست، یک کد عددی را آشکار می‌کند. کدها را جمع کن و عدد نهایی را برای باز کردن پیام مخفی وارد کن.
+</section>
+
+<div id="questions"></div>
+
+<section class="card">
+ <h2>کدهای کشف‌شده</h2>
+ <div class="muted">هر کدی که پیدا کنی اینجا ثبت می‌شود.</div>
+ <div class="codes" id="codes">هنوز کدی کشف نشده.</div>
+ <div class="total"><span>مجموع فعلی</span><strong id="sumBottom">۰</strong></div>
+</section>
+
+<section class="card">
+ <h2>قفل نهایی</h2>
+ <p class="muted">مجموع کدهای ۱۸ سؤال را وارد کن.</p>
+ <form class="form" id="finalForm">
+  <input id="finalInput" inputmode="numeric" placeholder="مجموع کدها" aria-label="مجموع کدها">
+  <button class="submit" type="submit">باز کردن قفل</button>
+ </form>
+ <div class="feedback" id="finalFeedback" aria-live="polite"></div>
+
+ <div class="message" id="message">
+  <h2>تبریک می‌گم!</h2>
+  <p>تو موفق شدی هر ۱۸ قفل رو باز کنی و به این پیام برسی.</p>
+  <p>راستش رو بخوای، امروز تولد منه و طبیعتاً باید بهم تبریک گفته بشه؛ ولی از اونجایی که تو افتخار آشنایی با من رو داری، تصمیم گرفتم به‌جای اینکه تو بهم تبریک بگی، من به تو تبریک بگم.</p>
+  <p>بالاخره هر کسی این شانس رو نداره که منو بشناسه.</p>
+  <p>خلاصه که قدر این موهبت الهی رو بدون.</p>
+  <p>راستی، یه چیزی رو باید بدونی...</p>
+  <p><strong>من بتمنم.</strong></p>
+  <p>آره، خودِ بتمن! فقط به‌جای اینکه شب‌ها توی گاتهام دنبال خلافکارها بگردم، فعلاً دارم تولد ۱۸ سالگیم رو جشن می‌گیرم.</p>
+  <p class="signature">با احترام، بتمنِ گاتهام؛ معروف به مهسا، کابوس خلافکاران و افتخار بشریت.</p>
+  <div class="footer">PROJECT 18 — MISSION COMPLETE</div>
+ </div>
+</section>
+<div class="footer">PROJECT 18 / ACCESS RESTRICTED</div>
+</main>
+
+<script>
+const questions=[
+ {q:"کدام جانور می‌تواند در شرایط خاص به مرحلهٔ جوان‌تر چرخهٔ زندگی خود برگردد؟",o:["ستارهٔ دریایی","عروس دریایی نامیرا","اسب دریایی","پنگوئن"],a:1,c:9},
+ {q:"کدام سیاره تقریباً به پهلو می‌چرخد؟",o:["نپتون","زحل","اورانوس","عطارد"],a:2,c:13},
+ {q:"کوچک‌ترین کشور جهان از نظر مساحت کدام است؟",o:["موناکو","واتیکان","سن‌مارینو","لیختن‌اشتاین"],a:1,c:20},
+ {q:"دنباله را کامل کن: ۱، ۱۱، ۲۱، ۱۲۱۱، ۱۱۱۲۲۱، ؟",o:["۳۱۲۲۱۱","۲۱۲۲۱۱","۳۱۱۲۲۱","۱۱۲۲۳۱"],a:0,c:8},
+ {q:"کدام حیوان اثر انگشتی شبیه اثر انگشت انسان دارد؟",o:["کوالا","پاندا","کانگورو","تنبل"],a:0,c:5},
+ {q:"کدام فلز در دمای اتاق مایع است؟",o:["آهن","جیوه","آلومینیوم","مس"],a:1,c:13},
+ {q:"الگو را کامل کن: ۱ ← ۳، ۲ ← ۸، ۳ ← ۱۵، ۴ ← ۲۴، ۵ ← ؟",o:["۳۰","۳۲","۳۵","۴۰"],a:2,c:1},
+ {q:"اگر A=1 و B=2 و به همین ترتیب ادامه دهیم، مجموع حروف CAT چقدر است؟",o:["۲۱","۲۴","۲۷","۳۰"],a:1,c:8},
+ {q:"کدام سیاره بیشترین تعداد قمر تأییدشده را دارد؟",o:["مشتری","زحل","اورانوس","نپتون"],a:1,c:19},
+ {q:"تیم فوتبال موردعلاقهٔ مهسا کدام است؟",o:["رئال مادرید","بارسلونا","منچسترسیتی","لیورپول"],a:1,c:1},
+ {q:"رنگ‌های موردعلاقهٔ مهسا کدام‌اند؟",o:["سبز و قرمز","آبی و سفید","سبز و مشکی","بنفش و صورتی"],a:2,c:13},
+ {q:"انیمهٔ موردعلاقهٔ مهسا کدام است؟",o:["اتک آن تایتان","شیطان‌کش","هایکیو","دفترچهٔ مرگ"],a:0,c:15},
+ {q:"کدام مجموعهٔ فیلم موردعلاقهٔ مهساست؟",o:["ارباب حلقه‌ها","هری پاتر","هانگر گیمز","گرگ‌ومیش"],a:1,c:18},
+ {q:"مهسا کدام سبک لباس را بیشتر دوست دارد؟",o:["رسمی و کلاسیک","اسپرت و راحت","استایل خیابانی و آزاد (اورسایز)","فانتزی و رنگارنگ"],a:2,c:1},
+ {q:"سریال کره‌ای موردعلاقهٔ مهسا کدام است؟",o:["وینچنزو","موش (Mouse)","گل شیطان","پنت‌هاوس"],a:1,c:4},
+ {q:"مهسا کدام ژانر فیلم و سریال را بیشتر دوست دارد؟",o:["جنایی و معمایی","عاشقانه","کمدی","تاریخی"],a:0,c:9},
+ {q:"مهسا کدام سبک موسیقی را بیشتر دوست دارد؟",o:["پاپ","راک","سنتی","ترکیبی از پاپ و راک"],a:3,c:16},
+ {q:"حیوان موردعلاقهٔ مهسا کدام است؟",o:["گرگ","عقاب","شیر","شاهین"],a:1,c:111}
+];
+
+const fa=n=>String(n).replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d]);
+const solved=new Set();
+const found=[];
+const questionsBox=document.getElementById("questions");
+
+questions.forEach((item,i)=>{
+ const card=document.createElement("section");
+ card.className="card";
+ const group=i<9?"GENERAL FILE":"MAHSA'S FILE";
+ card.innerHTML=
+ `<div class="tag">${group}</div>
+ <div class="qhead"><span>سؤال ${fa(i+1)} از ۱۸</span><span id="state${i}">قفل‌شده</span></div>
+ <h2>${item.q}</h2><div class="options"></div>
+ <div class="feedback" id="feedback${i}" aria-live="polite"></div>
+ <div class="reveal" id="reveal${i}">کد کشف‌شده: ${fa(item.c)}</div>`;
+ const options=card.querySelector(".options");
+
+ item.o.forEach((option,j)=>{
+  const button=document.createElement("button");
+  button.type="button";
+  button.className="option";
+  button.innerHTML=`<b>${["الف","ب","ج","د"][j]}</b>${option}`;
+
+  button.addEventListener("click",()=>{
+   if(solved.has(i))return;
+   const feedback=document.getElementById("feedback"+i);
+
+   if(j!==item.a){
+    feedback.textContent="پاسخ اشتباه است";
+    feedback.className="feedback";
+    return;
+   }
+
+   solved.add(i);
+   found.push({n:i+1,c:item.c});
+   feedback.textContent="پاسخ درست است؛ کد کشف شد.";
+   feedback.className="feedback good";
+   document.getElementById("state"+i).textContent="بازشده";
+   document.getElementById("reveal"+i).classList.add("show");
+   options.querySelectorAll("button").forEach(b=>b.disabled=true);
+   update();
+  });
+
+  options.appendChild(button);
+ });
+ questionsBox.appendChild(card);
+});
+
+function update(){
+ const sum=found.reduce((total,item)=>total+item.c,0);
+ document.getElementById("progress").textContent=fa(solved.size)+" / ۱۸";
+ document.getElementById("sumTop").textContent=fa(sum);
+ document.getElementById("sumBottom").textContent=fa(sum);
+ document.getElementById("bar").style.width=(solved.size/18*100)+"%";
+
+ const box=document.getElementById("codes");
+ box.innerHTML="";
+ if(found.length===0){
+  box.textContent="هنوز کدی کشف نشده.";
+  return;
+ }
+ [...found].sort((a,b)=>a.n-b.n).forEach(item=>{
+  const pill=document.createElement("span");
+  pill.className="pill";
+  pill.textContent="سؤال "+fa(item.n)+": "+fa(item.c);
+  box.appendChild(pill);
+ });
+}
+
+document.getElementById("finalForm").addEventListener("submit",event=>{
+ event.preventDefault();
+ const feedback=document.getElementById("finalFeedback");
+ const input=document.getElementById("finalInput").value
+  .replace(/[۰-۹]/g,d=>"۰۱۲۳۴۵۶۷۸۹".indexOf(d))
+  .replace(/[٠-٩]/g,d=>"٠١٢٣٤٥٦٧٨٩".indexOf(d));
+
+ if(solved.size!==18){
+  feedback.textContent="هنوز همهٔ ۱۸ قفل باز نشده‌اند.";
+  return;
+ }
+ if(Number(input)!==284){
+  feedback.textContent="رمز نهایی اشتباه است.";
+  return;
+ }
+
+ feedback.textContent="";
+ document.getElementById("message").classList.add("show");
+ document.getElementById("message").scrollIntoView({behavior:"smooth",block:"start"});
+});
+</script>
+</body>
+</html>
